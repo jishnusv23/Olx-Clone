@@ -4,22 +4,30 @@ import Arrow from "../assets/down-arrow-icon.jpg";
 import searchIcon from "../assets/Logos.png";
 import Login from "./Login";
 import { useState } from "react";
-const Navbar = () => {
+type searchProps = {
+  setSearch: (value: string) => void;
+};
+const Navbar = (props: searchProps) => {
   const [loginPop, setLoginPop] = useState(false);
   return (
     <>
-      <div className="flex justify-between  p-5">
+      <div className="flex justify-between  p-5 bg-slate-100 shadow-md">
         <img src={Logo} alt="" className="w-11 h-9" />
-        <div className="flex border-2 border-spacing-1 w-64 p-2 border-black ml-5">
+        <div className="flex border-2 border-spacing-1 w-64 p-2 border-black ml-5 bg-white">
           <img src={search} alt="" className="w-6 h-5 mt-1" />
-          <input type="text" placeholder="location" className="ml-3" />
-          <img src={Arrow} alt="" className="w-8 h-7" />
-        </div>
-        <div className="flex w-45 h-12 ml-4 border-2 border-black">
           <input
             type="text"
+            placeholder="location"
+            className="ml-3 outline-none"
+          />
+          <img src={Arrow} alt="" className="w-8 h-7" />
+        </div>
+        <div className="flex w-45 h-12 ml-4 border-2 border-black bg-white">
+          <input
+            onChange={(e) => props?.setSearch(e.target.value)}
+            type="text"
             placeholder="Find cars,mobiles"
-            className="ml-3 w-96 "
+            className="ml-3 w-96 outline-none"
           />
           <img src={searchIcon} alt="" />
         </div>

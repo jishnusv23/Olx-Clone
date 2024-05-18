@@ -3,19 +3,43 @@ import google from "../assets/google.png";
 import mobile from "../assets/mobile.png";
 import { signInWithPopup } from "firebase/auth";
 import firebaseExports from "../Firebase/setup";
+import { useEffect, useState } from "react";
+import { doc, setDoc } from "firebase/firestore";
 
 // You can now access auth and googleAuthProvider like this:
 type popUpProp = {
   setLoginPop: any;
 };
-const Login = (props:popUpProp) => {
-  const { auth, googleAuthProvider } = firebaseExports;
+const Login = (props: popUpProp) => {
+  const { auth, googleAuthProvider, db } = firebaseExports;
+  const [currentUser, setcurrentUser] = useState({});
+
   const googleSignin = async () => {
     try {
-      await signInWithPopup(auth, googleAuthProvider);
+      const result = await signInWithPopup(auth, googleAuthProvider);
+      const user = result.user;
+      await saveUserDataToFirestore(user);
+      setcurrentUser(user);
+      props?.setLoginPop(false);
     } catch (err) {
       console.log("the problem was google auth", err);
     }
+  };
+  console.log(currentUser, "opopopopopopopop");
+
+  const saveUserDataToFirestore = async (user: any) => {
+    const userRef = doc(db, "users", user.uid);
+    await setDoc(
+      userRef,
+      {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        lastLogin: new Date().toISOString(),
+      },
+      { merge: true }
+    ); // Use merge to avoid overwriting existing data
   };
   return (
     <div
@@ -30,7 +54,12 @@ const Login = (props:popUpProp) => {
         <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
           <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all  sm:w-96 sm:max-w-lg">
             <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-              <h1 onClick={()=>props?.setLoginPop(false)} className="cursor-pointer font-semibold text-3xl">X</h1>
+              <h1
+                onClick={() => props?.setLoginPop(false)}
+                className="cursor-pointer font-semibold text-3xl"
+              >
+                X
+              </h1>
               <div className="sm:flex sm:items-start">
                 <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left cursor-pointer">
                   <div className="mt-2">

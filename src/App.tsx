@@ -1,11 +1,21 @@
-import Navbar from "./Components/Navbar";
+import {BrowserRouter as Router,  Route, Routes } from "react-router-dom";
+import Main from "./Components/Main";
+import Details from "./Components/Details";
+import Create from "./Components/Create";
+
 
 const App = () => {
-  return(
+  return (
     <>
-    <Navbar/>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/details" element={<Details />} />
+          <Route path="/create" element={<Create />} />
+        </Routes>
+      </Router>
     </>
-  )
+  );
 };
 
 export default App;
