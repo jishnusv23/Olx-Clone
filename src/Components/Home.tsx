@@ -1,4 +1,6 @@
+import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
+
 
 type ProductProps = {
   products: any[];
@@ -7,6 +9,7 @@ type ProductProps = {
 };
 
 const Home = ({ products, search, menu }: ProductProps) => {
+  
   const filteredProducts = products.filter((data: any) =>
     data.title.includes(search ? search : menu)
   );

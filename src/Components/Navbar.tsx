@@ -3,12 +3,41 @@ import search from "../assets/search-bar.png";
 import Arrow from "../assets/down-arrow-icon.jpg";
 import searchIcon from "../assets/Logos.png";
 import Login from "./Login";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext, FirebaseContext } from "../Store/FirebaseContext";
+import { useNavigate } from "react-router-dom";
 type searchProps = {
   setSearch: (value: string) => void;
 };
 const Navbar = (props: searchProps) => {
   const [loginPop, setLoginPop] = useState(false);
+  const authContext = useContext(AuthContext);
+  const firebaseContext = useContext(FirebaseContext);
+  if (!authContext || !firebaseContext) {
+    return null;
+  }
+  
+
+  //history
+  const navigate=useNavigate()
+  const handleLogut= async()=>{
+    try {
+      if (firebaseContext && firebaseContext.auth) {
+        await firebaseContext.auth.signOut();
+        navigate("/login");
+      } else {
+        console.error(
+          "firebaseContext or firebaseContext.auth is not available"
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const { user } = authContext;
+  console.log("user name", user?.displayName);
+
   return (
     <>
       <div className="flex justify-between  p-5 bg-slate-100 shadow-md">
@@ -37,8 +66,11 @@ const Navbar = (props: searchProps) => {
         </div>
         <div className="flex h-12 p-3 ml-10 cursor-pointer underline hover:no-underline">
           <h1 onClick={() => setLoginPop(!loginPop)} className="font-bold">
-            Login
+            {user ? user.displayName : "Login"}
           </h1>
+        </div>
+        <div className="flex h-12 p-3 ml-10 cursor-pointer underline hover:no-underline">
+          {user && <h1 className="font-bold" onClick={handleLogut}>Logout</h1>}
         </div>
         <div className=" w-28 flex h-12 p-2 ml-10 cursor-pointer rounded-full border border-yellow-500">
           <h1 className="font-bold text-lg ml-3">+ SELL</h1>
