@@ -6,6 +6,7 @@ import Login from "./Login";
 import { useContext, useState } from "react";
 import { AuthContext, FirebaseContext } from "../Store/FirebaseContext";
 import { useNavigate } from "react-router-dom";
+
 type searchProps = {
   setSearch: (value: string) => void;
 };
@@ -16,15 +17,18 @@ const Navbar = (props: searchProps) => {
   if (!authContext || !firebaseContext) {
     return null;
   }
-  
 
   //history
-  const navigate=useNavigate()
-  const handleLogut= async()=>{
+  const navigate = useNavigate();
+  const { user,setUser } = authContext;
+  const handleLogut = async () => {
     try {
       if (firebaseContext && firebaseContext.auth) {
         await firebaseContext.auth.signOut();
-        navigate("/login");
+        console.log('hey');
+        setUser(null)
+        
+        // navigate("/login");
       } else {
         console.error(
           "firebaseContext or firebaseContext.auth is not available"
@@ -33,9 +37,8 @@ const Navbar = (props: searchProps) => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  const { user } = authContext;
   console.log("user name", user?.displayName);
 
   return (
@@ -70,11 +73,22 @@ const Navbar = (props: searchProps) => {
           </h1>
         </div>
         <div className="flex h-12 p-3 ml-10 cursor-pointer underline hover:no-underline">
-          {user && <h1 className="font-bold" onClick={handleLogut}>Logout</h1>}
+          {user && (
+            <h1 className="font-bold" onClick={handleLogut}>
+              Logout
+            </h1>
+          )}
         </div>
-        <div className=" w-28 flex h-12 p-2 ml-10 cursor-pointer rounded-full border border-yellow-500">
+        {user ? 
+          <div
+            className=" w-28 flex h-12 p-2 ml-10 cursor-pointer rounded-full border border-yellow-500"
+            onClick={() => navigate("/create")}
+          >
+            <h1 className="font-bold text-lg ml-3">+ SELL</h1>
+          </div>: <div className=" w-28 flex h-12 p-2 ml-10 cursor-pointer rounded-full border border-yellow-500" >
           <h1 className="font-bold text-lg ml-3">+ SELL</h1>
         </div>
+        }
       </div>
       {loginPop && <Login setLoginPop={setLoginPop} />}
     </>

@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import Home from "./Home";
 import Footer from "./Footer";
 import axios from "axios";
+import Addproducts from "./Addproducts";
 
 const Main = () => {
   const [products, setProducts] = useState([]);
@@ -30,6 +31,7 @@ const Main = () => {
     <div>
       <Navbar setSearch={setSearch}/>
       <Menubar setMenu={setMenu}/>
+      <Addproducts/>
       <Home products={products} search={search} menu={menu} />
       <Footer />
     </div>
