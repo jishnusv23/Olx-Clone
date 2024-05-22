@@ -17,10 +17,13 @@ const Menubar = ({ setMenu }: menuProps) => {
       >
         Electronics
       </h1>
-      <h1 onClick={() => setMenu("Jobs")} className="ml-5 text-lg font-bold">
+      <h1
+        onClick={() => setMenu("jewelery")}
+        className="ml-5 text-lg font-bold"
+      >
         Furniture
       </h1>
-      <h1 onClick={() => setMenu("Shirt")} className="ml-5 text-lg font-bold">
+      <h1 onClick={() => setMenu("Jobs")} className="ml-5 text-lg font-bold">
         Jobs
       </h1>
       <h1
